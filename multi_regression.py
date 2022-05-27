@@ -1,3 +1,7 @@
+# Lasso : Lasso regression is a type of linear regression that uses shrinkage. 
+# Shrinkage is where data values are shrunk towards a central point, like the mean. 
+# The lasso procedure encourages simple, sparse models (i.e. models with fewer parameters).
+
 import pandas as pd
 import numpy as np
 
@@ -17,7 +21,7 @@ from sklearn.model_selection import cross_val_score
 
 
 # to build the models
-from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 
@@ -37,11 +41,14 @@ print('Libraries imported successfully')
 df = pd.read_csv('./training_dataset_1000.csv')
 print('Dataset imported successfully')
 
-print(df.shape)
+print('Dataset shape', df.shape)
+
 data = df[['Positive', 'Negative', 'Neutral', 'numVotes','averageRating','rotten_Tomatoes','Status']]
+
 print('Dataframe CDF created successfully')
 
-print(data.isnull().mean())
+# print(data.isnull().mean())
+
 df.replace([np.inf, -np.inf], np.nan, inplace=True)
 # print(df.head())
 
@@ -58,7 +65,7 @@ print('There are {} numerical variables'.format(len(numerical)))
 
 # cdf = df[['Positive', 'Negative', 'Neutral', 'numVotes','averageRating','rotten_Tomatoes','Status']]
 
-X_train, X_test, y_train, y_test = train_test_split(data, data.averageRating, test_size=0.2, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(data, data.averageRating, test_size=0.4, random_state=0)
 print(X_train.shape, X_test.shape, X_train.shape, X_test.shape)
 
 
@@ -83,7 +90,24 @@ pred = lin_model.predict(scaler.transform(X_test))
 print('linear test mse: {}'.format(mean_squared_error(y_test, pred)))
 
 
-importance = pd.Series(np.abs(lin_model.coef_.ravel()))
-importance.index = X_train.columns
-importance.sort_values(inplace=True, ascending=False)
-importance.plot.bar(figsize=(18,6))
+# importance = pd.Series(np.abs(lin_model.coef_.ravel()))
+# importance.index = X_train.columns
+# importance.sort_values(inplace=True, ascending=False)
+# importance.plot.bar(figsize=(18,6))
+
+
+#Ridge Regression Model
+ridgeReg = Ridge(alpha=10)
+
+ridgeReg.fit(X_train,y_train)
+
+#train and test scorefor ridge regression
+train_score_ridge = ridgeReg.score(X_train, y_train)
+test_score_ridge = ridgeReg.score(X_test, y_test)
+
+r_pred = ridgeReg.predict(X_test)
+
+
+print("\nRidge Model............................................\n")
+print("The train score for ridge model is {}".format(train_score_ridge))
+print("The test score for ridge model is {}".format(test_score_ridge))
