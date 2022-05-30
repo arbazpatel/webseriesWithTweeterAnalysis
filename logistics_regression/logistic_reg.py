@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 
 print('Libraries imported successfully')
 
-df = pd.read_csv('./training_dataset_1000.csv')
+df = pd.read_csv('../input_1500_dataset/training_dataset.csv')
 print('Dataset imported successfully')
 
 data = df[['Positive', 'Negative', 'Neutral', 'numVotes','averageRating','rotten_Tomatoes','Status']]

@@ -12,7 +12,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
 # Open/create a file to append data to
-csvFile = open('raw_tweets.csv', 'a')
+csvFile = open('../raw_twwets/raw_tweets.csv', 'a')
 
 #Use csv writer
 csvWriter = csv.writer(csvFile)

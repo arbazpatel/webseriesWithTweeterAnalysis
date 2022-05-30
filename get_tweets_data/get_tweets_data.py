@@ -49,7 +49,7 @@ positive_list = []
 tweets_list = []
 
 # hash_tags = ["Rudra","Family Man", "Red notice"]
-hash_tags = pd.read_csv("netflix_titles.csv", encoding="utf-8")
+hash_tags = pd.read_csv("../series_names_data/netflix_titles.csv", encoding="utf-8")
 
 hash_tags = hash_tags['title'][::1000] # This([::1000]) is for getting no. of records to fetch from csv file
 print(hash_tags, 'all hash tags')

@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 print('Libraries imported successfully')
 
-df = pd.read_csv('./training_dataset_1000.csv')
+df = pd.read_csv('../input_1500_dataset/training_dataset.csv')
 print('Dataset imported successfully')
 
 print(df.shape)
