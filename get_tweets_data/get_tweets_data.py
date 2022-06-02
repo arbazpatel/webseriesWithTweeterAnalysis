@@ -20,14 +20,16 @@ from sklearn.feature_extraction.text import CountVectorizer
 import csv
 import preprocessor as p
 
-
 consumer_key = 'RkQqpzW896xtPE3V6QW1RDJeK'
 consumer_secret = 'PvUXFfbl8NdOyTjJj5fR0ScoFaHYTAEShRncmBRcIkJOc7yMy2'
 access_token = '939822906564947973-saYHbiZPbgXwJuPelYTM7SJ5hP7R7zS'
 access_token_secret = 'vdHgGxylQWLjZ5ee2S20YjLHNElwtutNnTUVtXNwbqU4o'
+
 India_WOE_ID = 1
+
 auth = tweepy.OAuthHandler(consumer_key= consumer_key, consumer_secret= consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
+
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
 
@@ -51,9 +53,9 @@ tweets_list = []
 # hash_tags = ["Rudra","Family Man", "Red notice"]
 hash_tags = pd.read_csv("../series_names_data/netflix_titles.csv", encoding="utf-8")
 
-hash_tags = hash_tags['title'][::1000] # This([::1000]) is for getting no. of records to fetch from csv file
-print(hash_tags, 'all hash tags')
-for ht in hash_tags:
+hash_tags_title = hash_tags['title'][:10] # This([::1000]) is for getting no. of records to fetch from csv file
+print(hash_tags_title, 'all hash tags')
+for index, ht in enumerate(hash_tags_title):
     positive = 0
     negative = 0
     neutral = 0
@@ -93,6 +95,36 @@ for ht in hash_tags:
         text = p.clean(text)
         text = text.replace('@','')
         text = text.replace('\n','')
+        text = text.replace('@','')
+        text = text.replace('\xe2','')
+        text = text.replace('\x80','')
+        text = text.replace('\x98','')
+
+        text = text.replace('\n','')
+        text = text.replace('|','')
+
+        regex_pattern = re.compile(pattern = "["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                           "]+", flags = re.UNICODE)
+        text = re.sub(regex_pattern,'',text)
+
+        # The below block of code removes urls from the text.
+        pattern = re.compile(r'(https?://)?(www\.)?(\w+\.)?(\w+)(\.\w+)(/.+)?')
+        text = re.sub(pattern,'',text)
+
+        # The following block removes @mentions and hashes from the text.
+        re_list = ['@[A-Za-z0-9_]+', '#']
+        combined_re = re.compile( '|'.join( re_list) )
+        text = re.sub(combined_re,'',text)
+    
+        # The block below will remove html characters from the text.
+        del_amp = BeautifulSoup(text, 'lxml')
+        text = del_amp.get_text()
+
+
         tweet_list.append(text)
         analysis = TextBlob(text)
         score = SentimentIntensityAnalyzer().polarity_scores(text)
@@ -143,13 +175,19 @@ for ht in hash_tags:
         status = "Neutral"
         # print('You Decide', ht)
 
-    tweets_list.append({'Web Series':ht, "Positive":positive, "Negative":negative, "Neutral":neutral, "Analysis":what_to_do, "Status":status})
+    avg_rating = ((hash_tags['averageRating'][:10][index]+hash_tags['rotten_Tomatoes'][:10][index])/3)
+
+    print(avg_rating, 'average ratings')
+    if round(avg_rating)>5:
+        avg_rating = 5.0
+
+    tweets_list.append({'Web Series':ht, "Positive":positive, "Negative":negative, "Neutral":neutral, "Analysis":what_to_do, "Status":status, "Calculated_rating":avg_rating})
 
 # import numpy as np
 
 # np.savetxt("shows.csv", tweets_list, delimiter=", ", fmt="% s")
 # print(tweets_list, 'tweet pos neg neu')
-columns = ["Web Series", "Positive", "Negative", "Neutral","Analysis", "Status"]
+columns = ["Web Series", "Positive", "Negative", "Neutral","Analysis", "Status", "Calculated_rating"]
 try:
     with open("tweet_analysis.csv", 'w',newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=columns)
