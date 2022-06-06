@@ -68,7 +68,6 @@ print('There are {} numerical variables'.format(len(numerical)))
 X_train, X_test, y_train, y_test = train_test_split(data, data.Calculated_rating, test_size=0.4, random_state=0)
 print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
-
 X_train=pd.get_dummies(X_train,columns=categorical,drop_first=True)
 X_test=pd.get_dummies(X_test,columns=categorical,drop_first=True)
 
@@ -105,8 +104,6 @@ print('linear train mse: {}'.format(mean_squared_error(y_train, lin_pred_train))
 
 lin_pred_test = lin_model.predict(scaler.transform(X_test))
 print('linear test mse: {}'.format(mean_squared_error(y_test, lin_pred_test)))
-
-
 
 print("\nRidge Model............................................\n")
 # Ridge Regression Model

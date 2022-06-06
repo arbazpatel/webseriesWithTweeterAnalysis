@@ -35,7 +35,9 @@ X = np.asarray(df[['Positive', 'Negative', 'Neutral', 'numVotes','averageRating'
 
 # print(X)
 
-y = np.asarray(data['Calculated_rating'])
+sns.regplot(x=df[['averageRating']], y=df[['Calculated_rating']], data=df, logistic=True, ci=None)
+
+y = np.asarray(data['Status'])
 y = np.asarray(y)
 
 X = preprocessing.StandardScaler().fit(X).transform(X)
@@ -43,6 +45,8 @@ X = preprocessing.StandardScaler().fit(X).transform(X)
 X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.4, random_state=4)
 print ('Train set:', X_train.shape,  y_train.shape)
 print ('Test set:', X_test.shape,  y_test.shape)
+
+
 
 # Grid searching key hyperparametres for logistic regression
 
@@ -75,5 +79,10 @@ yhat = LR.predict(X_test)
 yhat_prob = LR.predict_proba(X_test)
 # print(yhat_prob)
 
+plt.scatter(X_train[:, :-1], y_train, color = 'red')
+plt.plot(X_train[:, :-1], LR.predict(X_train), color = 'green')
+plt.title("Salary vs Experience (Testing set)")
+
+plt.show()
 
 print('Test And Actual Result Similarity',jaccard_score(y_test, yhat,pos_label = "PAIDOFF",average='micro'))
