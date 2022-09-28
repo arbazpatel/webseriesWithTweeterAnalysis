@@ -1,0 +1,45 @@
+1) Create Virtual Environment :
+
+    python3 -m venv [Virtual Environment Name]
+
+    ex. : "python3 -m venv webAnalyticsEnv"
+
+2) Activate Virtual Environment :
+
+    .\[Virtual Environment Folder Name]\Scripts\activate
+    
+    ex. :  ".\webAnalyticsEnv\Scripts\activate"
+
+3) Install requirements :
+
+    If "pip" is not installed check this link : "https://www.geeksforgeeks.org/how-to-install-pip-on-windows/#:~:text=Step%201%3A%20Download%20the%20get,where%20the%20above%20file%20exists.&text=Step%204%3A%20Now%20wait%20through,Voila!"
+
+    and run,
+
+    "pip install -r requirements.txt"
+
+4) after the installation, go the root folder and run files as needed and open cmd in the folder,
+
+    a) for getting raw tweets :
+
+        "sh run_get_raw_tweets.sh"
+
+    b) for getting and saving tweets in csv file :
+
+        "sh run_get_tweets_data.sh"
+
+    c) for running logistics regression :
+
+        "sh run_logistics_regression.sh"
+
+    d) for running multiple linear regression example 1 :
+
+        "sh run_multi_linear_regression_ex1.sh"
+
+    e) for running multiple linear regression example 2 :
+
+        "sh run_multi_linear_regression_ex2.sh"
+
+    f) code for adding an extra column in tweets data csv as "calculated rating"
+
+        "sh run_get_series_name.sh"

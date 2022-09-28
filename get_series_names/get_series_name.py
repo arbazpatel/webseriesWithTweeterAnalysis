@@ -7,8 +7,7 @@ hash_tags_title = hash_tags['title'][:1500] # This([::1000]) is for getting no. 
 # print(hash_tags_title, 'all hash tags')
 for index, ht in enumerate(hash_tags_title):
     avg_rating = ((hash_tags['averageRating'][:1500][index]+hash_tags['rotten_Tomatoes'][:1500][index])/3)
-
-
+    
     if round(avg_rating,1)>5:
         avg_rating = 5.0
     else:
