@@ -1,3 +1,8 @@
+** For Cloning the github repository **
+
+"git clone https://github.com/arbazpatel/webseriesWithTweeterAnalysis.git"
+
+
 1) Create Virtual Environment :
 
     python3 -m venv [Virtual Environment Name]
